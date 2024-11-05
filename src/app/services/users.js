@@ -31,10 +31,12 @@ const saveUser = async (user, userRepository) => {
 
 const getUser = async (userEmail, userRepository) => {
     try {
-        const user = await userRepository.getUserByEmail(userEmail)
+        const user = await userRepository.getFullUserByEmail(userEmail)
 
         if (!user)
             return errorResponse(NotFound, UserNotFoundMessage)
+
+        return successResponse(200, user)
     } catch (error) {
         return errorResponse(InternalServerError, InternalServerErrorMessage)
     }
