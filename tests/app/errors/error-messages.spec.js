@@ -1,7 +1,7 @@
 const { describe, test, expect } = require('@jest/globals')
 const errorMessages = require('../../../src/app/errors/error-messages')
 
-describe('Error messages enum suite', () => {
+describe('Error messages suite', () => {
 
     test('validate error messages values', () => { 
         expect(Object.values(errorMessages)).toStrictEqual([
