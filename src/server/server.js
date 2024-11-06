@@ -2,25 +2,29 @@ const express = require('express')
 const controllers = require('../app/controllers')
 const app = express()
 
-module.exports = (port) => {
+module.exports = (port, config) => {
     app.get('/users/:email', async (req, res) => {
         const { success, error, data } = await controllers.userController.getUser(
-            req.params.email, {
-            getFullUserByEmail: () => ({ oi: true }),
-        })
+            req.params.email, config.userRepository)
 
         return res.status(success ?? error).send(data)
     })
 
-    app.post('/users/:email', (req, res) => {
-        res.send('Hello World!')
+    app.post('/users/:email', async (req, res) => {
+        const { success, error, data } = await controllers.userController.saveUser(
+            req.params.email, config.userRepository)
+
+        return res.status(success ?? error).send(data)
     })
 
-    app.delete('/users/:email', (req, res) => {
-        res.send('Hello World!')
+    app.delete('/users/:email', async (req, res) => {
+        const { success, error, data } = await controllers.userController.deleteUser(
+            req.params.email, config.userRepository)
+
+        return res.status(success ?? error).send(data)
     })
 
-    app.post('/events/:email', (req, res) => {
+    app.post('/events/:email', async (req, res) => {
         res.send('Hello World!')
     })
 
