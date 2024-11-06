@@ -1,3 +1,3 @@
-const consent = require('./src/app/enums/consent-ids')
+const app = require('./src/server/server')
 
-console.log(consent.email_notifications)
+app(3000)
