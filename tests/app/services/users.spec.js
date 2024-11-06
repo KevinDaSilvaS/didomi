@@ -6,7 +6,7 @@ describe('userService suite', () => {
 
     describe('getUser tests', () => {
         test('should get user successfully', async () => {
-            const user = await userService.getUser('k@k.com', {
+            const user = await userService.getUser({ email: 'k@k.com'}, {
                 getFullUserByEmail: () => ({
                     id: "00000000-0000-0000-0000-000000000000",
                     email: "valid@email.com",
@@ -27,7 +27,7 @@ describe('userService suite', () => {
         })
 
         test('should return 404 when user is not found', async () => {
-            const user = await userService.getUser('k@k.com', {
+            const user = await userService.getUser({ email: 'k@k.com'}, {
                 getFullUserByEmail: () => undefined
             })
             expect(user.error).toBe(404)
@@ -35,7 +35,7 @@ describe('userService suite', () => {
         })
 
         test('should return internal server error when the unexpected happens', async () => {
-            const user = await userService.getUser('k@k.com', {
+            const user = await userService.getUser({ email: 'k@k.com'}, {
                 getFullUserByEmail: () => { throw new Error("err") }
             })
             expect(user.error).toBe(500)
@@ -79,6 +79,23 @@ describe('userService suite', () => {
             const user = await userService.saveUser({ email: 'k@k.com'}, {
                 getUserByEmail: () => undefined,
                 save: () => { throw new Error('err') }
+            })
+            expect(user.error).toBe(500)
+            expect(user.data).toBe(InternalServerErrorMessage)
+        })
+    })
+
+    describe('deleteUser tests', () => {
+        test('should get user successfully', async () => {
+            const user = await userService.deleteUser({ email: 'k@k.com' }, {
+                deleteUser: () => true
+            })
+            expect(user.success).toBe(204)
+        })
+
+        test('should return internal server error when the unexpected happens', async () => {
+            const user = await userService.deleteUser({ email: 'k@k.com' }, {
+                deleteUser: () => { throw new Error("err") }
             })
             expect(user.error).toBe(500)
             expect(user.data).toBe(InternalServerErrorMessage)

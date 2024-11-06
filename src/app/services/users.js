@@ -29,14 +29,30 @@ const saveUser = async (user, userRepository) => {
     }
 }
 
-const getUser = async (userEmail, userRepository) => {
+const getUser = async (user, userRepository) => {
     try {
-        const user = await userRepository.getFullUserByEmail(userEmail)
+        const validationResult = userValidator.validate(user)
+        if (validationResult.error)
+            return errorResponse(UnprocessableEntity, validationResult.error.message)
+        const userFound = await userRepository.getFullUserByEmail(user.email)
 
-        if (!user)
+        if (!userFound)
             return errorResponse(NotFound, UserNotFoundMessage)
 
-        return successResponse(200, user)
+        return successResponse(200, userFound)
+    } catch (error) {
+        return errorResponse(InternalServerError, InternalServerErrorMessage)
+    }
+}
+
+const deleteUser = async (user, userRepository) => {
+    try {
+        const validationResult = userValidator.validate(user)
+        if (validationResult.error)
+            return errorResponse(UnprocessableEntity, validationResult.error.message)
+        await userRepository.deleteUser(user.email)
+
+        return successResponse(204, {})
     } catch (error) {
         return errorResponse(InternalServerError, InternalServerErrorMessage)
     }
@@ -44,5 +60,6 @@ const getUser = async (userEmail, userRepository) => {
 
 module.exports = {
     saveUser,
-    getUser
+    getUser,
+    deleteUser
 }
