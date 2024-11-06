@@ -10,7 +10,7 @@ describe('eventService suite', () => {
             const event = await eventService.saveEvent({ 
                 id: consentIdEnum.email_notifications,
                 enabled: true
-            }, {
+            }, 'k@k.com', {
                 save: () => ({
                     id: consentIdEnum.email_notifications,
                     enabled: true
@@ -24,7 +24,7 @@ describe('eventService suite', () => {
             const event = await eventService.saveEvent({ 
                 id: 'InvalidConsentId',
                 enabled: true
-            }, {})
+            }, 'k@k.com', {})
             expect(event.error).toBe(422)
         })
 
@@ -32,7 +32,7 @@ describe('eventService suite', () => {
             const event = await eventService.saveEvent({ 
                 id: consentIdEnum.email_notifications,
                 enabled: true
-            }, {
+            }, 'k@k.com', {
                 save: () => { throw new Error('err') }
             })
             expect(event.error).toBe(500)
