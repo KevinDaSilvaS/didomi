@@ -34,7 +34,7 @@ const getUser = async (user, userRepository) => {
         const validationResult = userValidator.validate(user)
         if (validationResult.error)
             return errorResponse(UnprocessableEntity, validationResult.error.message)
-        const userFound = await userRepository.getFullUserByEmail(user.email)
+        const userFound = await userRepository.getUserByEmail(user.email)
 
         if (!userFound)
             return errorResponse(NotFound, UserNotFoundMessage)
