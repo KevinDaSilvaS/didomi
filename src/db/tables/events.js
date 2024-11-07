@@ -4,7 +4,7 @@ const usersTable = require('./users')
 const eventsTable = sqliteTable("events", {
   id: text().notNull(),
   enabled: integer({ mode: 'boolean' }).notNull(),
-  email: text().notNull().references(() => usersTable.email)
+  email: text().notNull()
 })
 
 module.exports = eventsTable
