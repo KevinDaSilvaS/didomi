@@ -36,7 +36,7 @@ describe('eventService suite', () => {
                 save: () => { throw new Error('err') }
             })
             expect(event.error).toBe(500)
-            expect(event.data).toBe(InternalServerErrorMessage)
+            expect(event.data.error).toBe(InternalServerErrorMessage)
         })
     })
 })

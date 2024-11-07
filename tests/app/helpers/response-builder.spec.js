@@ -7,7 +7,7 @@ describe('Response builder suite', () => {
         const errorResponse = responseBuilder.errorResponse(422, 'error message')
         expect(errorResponse.error).toBe(422)
         expect(errorResponse.success).toBe(undefined)
-        expect(errorResponse.data).toBe('error message')
+        expect(errorResponse.data).toStrictEqual({'error': 'error message'})
     })
 
     test('validate success response object', () => { 

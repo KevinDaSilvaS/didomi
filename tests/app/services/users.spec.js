@@ -31,7 +31,7 @@ describe('userService suite', () => {
                 getFullUserByEmail: () => undefined
             })
             expect(user.error).toBe(404)
-            expect(user.data).toBe(UserNotFoundMessage)
+            expect(user.data.error).toBe(UserNotFoundMessage)
         })
 
         test('should return internal server error when the unexpected happens', async () => {
@@ -39,7 +39,7 @@ describe('userService suite', () => {
                 getFullUserByEmail: () => { throw new Error("err") }
             })
             expect(user.error).toBe(500)
-            expect(user.data).toBe(InternalServerErrorMessage)
+            expect(user.data.error).toBe(InternalServerErrorMessage)
         })
     })
 
@@ -81,7 +81,7 @@ describe('userService suite', () => {
                 save: () => { throw new Error('err') }
             })
             expect(user.error).toBe(500)
-            expect(user.data).toBe(InternalServerErrorMessage)
+            expect(user.data.error).toBe(InternalServerErrorMessage)
         })
     })
 
@@ -98,7 +98,7 @@ describe('userService suite', () => {
                 deleteUser: () => { throw new Error("err") }
             })
             expect(user.error).toBe(500)
-            expect(user.data).toBe(InternalServerErrorMessage)
+            expect(user.data.error).toBe(InternalServerErrorMessage)
         })
     })
 })
