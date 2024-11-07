@@ -18,7 +18,6 @@ const getUserByEmail = async (email) => {
     const users = await db.select()
         .from(usersTable)
         .where(eq(usersTable.email, email))
-        .all()
 
     if (users.length <= 0)
         return undefined
@@ -32,7 +31,6 @@ const getUserByEmail = async (email) => {
 const deleteUser = async (email) => {
     const user = await db.delete(usersTable)
         .where(eq(usersTable.email, email))
-
     return user
 }
 

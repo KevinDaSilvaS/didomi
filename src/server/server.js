@@ -27,7 +27,6 @@ module.exports = (port, config) => {
     })
 
     app.post('/events/:email', async (req, res) => {
-        console.log(req.body)
         const { success, error, data } = await controllers.eventController.saveEvent(
             req.body, req.params.email, config.eventsRepository)
 
