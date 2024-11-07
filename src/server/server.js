@@ -1,6 +1,8 @@
 const express = require('express')
+const bodyParser = require('body-parser')
 const controllers = require('../app/controllers')
 const app = express()
+app.use(bodyParser.json())
 
 module.exports = (port, config) => {
     app.get('/users/:email', async (req, res) => {
@@ -25,7 +27,11 @@ module.exports = (port, config) => {
     })
 
     app.post('/events/:email', async (req, res) => {
-        res.send('Hello World!')
+        console.log(req.body)
+        const { success, error, data } = await controllers.eventController.saveEvent(
+            req.body, req.params.email, config.eventsRepository)
+
+        return res.status(success ?? error).send(data)
     })
 
     return app.listen(port, () => {
