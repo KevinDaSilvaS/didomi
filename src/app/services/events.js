@@ -10,6 +10,9 @@ const saveEvent = async (event, email, eventRepository) => {
             return errorResponse(UnprocessableEntity, validationResult.error.message)
 
         const savedEvent = await eventRepository.save(event, email)
+        if(!savedEvent) 
+            return errorResponse(InternalServerError, InternalServerErrorMessage)
+
         return successResponse(201, savedEvent)
     } catch (error) {
         return errorResponse(InternalServerError, InternalServerErrorMessage)

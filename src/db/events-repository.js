@@ -9,7 +9,10 @@ const db = drizzle('file:local.db')
 
 const save = async (event, email) => {
     const data = await db.insert(eventsTable).values({ ...event, email })
-    return data
+    if(data.rowsAffected > 0) {
+        return event
+    }
+    return undefined
 }
 
 const getEvents = async (email) => {
