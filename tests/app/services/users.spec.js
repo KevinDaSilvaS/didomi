@@ -7,7 +7,7 @@ describe('userService suite', () => {
     describe('getUser tests', () => {
         test('should get user successfully', async () => {
             const user = await userService.getUser({ email: 'k@k.com'}, {
-                getFullUserByEmail: () => ({
+                getUserByEmail: () => ({
                     id: "00000000-0000-0000-0000-000000000000",
                     email: "valid@email.com",
                     consents: [
@@ -28,7 +28,7 @@ describe('userService suite', () => {
 
         test('should return 404 when user is not found', async () => {
             const user = await userService.getUser({ email: 'k@k.com'}, {
-                getFullUserByEmail: () => undefined
+                getUserByEmail: () => undefined
             })
             expect(user.error).toBe(404)
             expect(user.data.error).toBe(UserNotFoundMessage)
@@ -36,7 +36,7 @@ describe('userService suite', () => {
 
         test('should return internal server error when the unexpected happens', async () => {
             const user = await userService.getUser({ email: 'k@k.com'}, {
-                getFullUserByEmail: () => { throw new Error("err") }
+                getUserByEmail: () => { throw new Error("err") }
             })
             expect(user.error).toBe(500)
             expect(user.data.error).toBe(InternalServerErrorMessage)
