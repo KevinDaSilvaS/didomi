@@ -8,39 +8,39 @@ const eventsTable = require('./tables/events')
 const client = createClient({ url: process.env?.DB_FILE_NAME || 'file:local.db' })
 const db = drizzle('file:local.db')
 
-
 const save = async (user) => {
-    const insertedUser = await db.insert(usersTable).values(user)
-    return insertedUser
-}
-
-const getFullUserByEmail = async (email) => {
-    const user = await db.select()
-        .from(usersTable)
-        .where(usersTable.email, email)
-        .leftJoin(eventsTable, eq(usersTable.email, eventsTable.email))
-        .all()
-        
-    return user
+    await db.insert(usersTable).values(user)
+    return await getUserByEmail(user.email)
 }
 
 const getUserByEmail = async (email) => {
-    const user = await db.select()
+    const userData = await db.select()
         .from(usersTable)
-        .where(usersTable.email, email)
+        .where(eq(usersTable.email, email))
+        .leftJoin(eventsTable, eq(usersTable.email, eventsTable.email))
+        .all()
+
+    if (userData.length <= 0)
+        return undefined
+
+    const { users, events } = userData[0]
+    const user = {
+        ...users,
+        events: events ?? []
+    }
+
     return user
 }
 
 const deleteUser = async (email) => {
-    const user = await db.delete()
-        .from(usersTable)
-        .where(usersTable.email, email)
+    const user = await db.delete(usersTable)
+        .where(eq(usersTable.email, email))
+
     return user
 }
 
 module.exports = {
     save,
-    getFullUserByEmail,
     getUserByEmail,
     deleteUser
 }
