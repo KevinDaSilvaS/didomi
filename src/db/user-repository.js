@@ -3,7 +3,7 @@ const { eq } = require('drizzle-orm')
 const { drizzle } = require('drizzle-orm/libsql')
 const { createClient } = require('@libsql/client')
 const usersTable = require('./tables/users')
-const eventsTable = require('./tables/events')
+const eventsRepository = require('./events-repository')
 
 const client = createClient({ url: process.env?.DB_FILE_NAME || 'file:local.db' })
 const db = drizzle('file:local.db')
@@ -14,20 +14,17 @@ const save = async (user) => {
 }
 
 const getUserByEmail = async (email) => {
-    const userData = await db.select()
+    const consents = await eventsRepository.getEvents(email)
+    const users = await db.select()
         .from(usersTable)
         .where(eq(usersTable.email, email))
-        .leftJoin(eventsTable, eq(usersTable.email, eventsTable.email))
         .all()
 
-    if (userData.length <= 0)
+    if (users.length <= 0)
         return undefined
 
-    const { users, events } = userData[0]
-    const user = {
-        ...users,
-        events: events ?? []
-    }
+    const user = users[0]
+    user.consents = consents
 
     return user
 }
