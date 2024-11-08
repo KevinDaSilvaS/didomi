@@ -1,6 +1,5 @@
 const { eq, max } = require('drizzle-orm')
 const { drizzle } = require('drizzle-orm/libsql')
-const consentIds = require('../app/enums/consent-ids')
 const eventsTable = require('./tables/events')
 
 const db = drizzle(process.env.DB_NAME)
