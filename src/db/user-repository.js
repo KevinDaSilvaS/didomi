@@ -1,12 +1,9 @@
-const process = require('dotenv/config')
 const { eq } = require('drizzle-orm')
 const { drizzle } = require('drizzle-orm/libsql')
-const { createClient } = require('@libsql/client')
 const usersTable = require('./tables/users')
 const eventsRepository = require('./events-repository')
 
-const client = createClient({ url: process.env?.DB_FILE_NAME || 'file:local.db' })
-const db = drizzle('file:local.db')
+const db = drizzle(process.env.DB_NAME)
 
 const save = async (user) => {
     await db.insert(usersTable).values(user)
