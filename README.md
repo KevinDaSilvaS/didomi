@@ -30,7 +30,7 @@
 - DELETE remove user 
 - - route ` /users/:email `
 - POST insert event for one user 
-- - route ` /users/:email `
+- - route ` /events/:email `
 - - body: ` {
 	 "id": "sms_notifications",
    "enabled": true
